@@ -12,4 +12,6 @@ void project() {
 	//t.tempPerDay();
 	//t.hotCold();
 	//t.tempPerYear(2050);
+	
+	//t.Seasons();
 }

@@ -13,6 +13,7 @@ class tempTrender {
 	void tempOnDayAndre(int monthToCalculate, int dayToCalculate); //Make a histogram of the temperature on this day
 	void delete_lines(const char *file_name, int n);
 	vector<std::string> split(string s, string delimiter);
+	void tempTrender::Seasons();
 	
 	
 	//void tempOnDay(int dateToCalculate); //Make a histogram of the temperature on this date

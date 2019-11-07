@@ -21,9 +21,26 @@ tempTrender::tempTrender(string filePath) {
 }
 
 void tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate){
-delete_lines("smhi-openda_Karlstad_1.csv", 12);
-//int monthToCalculate = 1; 
-//int dayToCalculate = 2;
+vector<string> test(10);
+vector<int> x(10);
+int m=0;
+for (int j=0; j<10 ; j++)
+		{
+			myFile.ignore(5000, '\n');
+			
+		}		
+		
+		do
+		{	
+			getline(myFile, test[m], '\n');
+			stringstream geek(test[m]);
+			geek >> x[m];
+			//cout << x[m] << endl;
+			m++;
+				
+		}
+		while( x.at(m) != 0 );	
+
 ifstream f("smhi-openda_Karlstad_1.csv"); //opening the file for reading
 if (f.fail()){
 	cout<<"Could not open file.\n";
@@ -125,4 +142,128 @@ void tempTrender::tempOnDayAndre(int monthToCalculate, int dayToCalculate){
 	}
 
 }
+
+
+
+void main()
+{
+	
+	int integer;
+	
+	ifstream myFile("smhi-openda_Karlstad.csv");
+
+	if (!myFile.is_open())
+	{
+		cout << "File is open" << endl;
+	}
+
+	vector<string> year(430000);
+	vector<string> month(430000);
+	vector<string> day(430000);
+	vector<string> time(430000);
+	vector<string> temp(430000);
+	vector<string> test(10);
+	vector<int> x(10);
+	int vectorSize= 430000;
+	int counter = 0;
+	int m=0;
+	
+
+
+	while (myFile.good())
+	{
+
+		for (int j=0; j<10 ; j++)
+		{
+			myFile.ignore(5000, '\n');
+			
+		}		
+		
+		do
+		{	
+			getline(myFile, test[m], '\n');
+			stringstream geek(test[m]);
+			geek >> x[m];
+			//cout << x[m] << endl;
+			m++;
+				
+		}
+		while( x.at(m) != 0 );
+		
+		
+		
+		
+		 	
+	
+		for (int i=0; i < vectorSize ; i++)
+		{
+	 
+
+			getline(myFile, year[i], '-');
+			getline(myFile, month[i], '-');
+			getline(myFile, day[i], ';');
+			getline(myFile, time[i], ';');
+			getline(myFile, temp[i], ';');
+			myFile.ignore(400, '\n');
+		
+		}
+	
+		
+	}
+
+
+	for (int i=0; i < 1; i++)
+	{
+		cout << "year: " << year[i] << endl;
+		cout << "month: " << month[i] << endl;
+		cout << "day: " << day[i] << endl;
+		cout << "time: " << time[i] << endl;
+		cout << "temperature: " << temp[i] << endl;
+		cout << "------------------" << endl;
+	}
+}	
+void tempTrender::Seasons(){	
+	vector<string> midday;
+	
+	for (int i= 0;  i<430000 ; i++)
+	{
+		if ( time[i] == "12:00:00")
+		{
+			
+			midday.push_back(temp[i]);
+			
+		}
+	}
+	
+	std::vector<int> intNumbers;
+	
+	ofstream myfile;
+	myfile.open ("example.txt");
+	
+    for (int i=0; i< midday.size(); i++)
+    {
+     int num = atoi(midday.at(i).c_str());
+     intNumbers.push_back(num);
+     
+	 myfile << intNumbers[i] << endl;
+	 
+     //cout << intNumbers[i] << endl;
+    }
+
+int k=4000;
+double x[k], y[k];
+double j=0, s=0;
+
+for (int i=0.; i<k; i++){
+	x[i]=j;
+	myfile>>s;
+	y[i]=s;
+	j++;
+	}
+TGraph* hist= new TGraph(k, x, y);
+hist->Draw();
+}
+
+}
+
 
