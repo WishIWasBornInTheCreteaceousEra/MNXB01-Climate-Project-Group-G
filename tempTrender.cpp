@@ -11,6 +11,7 @@
 #include <TStyle.h>  // style object
 #include <TMath.h>   // math functions
 #include <TCanvas.h> // canvas object
+#include <THStack.h>
 #include "tempTrender.h"
 
 using namespace std;
@@ -19,6 +20,16 @@ using namespace std;
 tempTrender::tempTrender(string filePath){
 	cout << "The user supplied " << filePath << " as the path to the data file." << endl;
 	FilePath = filePath;
+	
+	int pos1 = filePath.find("/"); 
+	string fileName = filePath.substr(pos1 + 1);
+	cout<<fileName<<endl;
+	int pos2 = fileName.find(".");
+	fileName = fileName.substr(0,  pos2);
+	cout<<fileName<<endl;
+	fileName.append(".jpg"); 
+	
+	FileName=fileName;
 }
 
 
@@ -97,7 +108,7 @@ void tempTrender::tempPerDay(double Year, double Hour){
 	
 }
 
-void tempTrender::hotCold(){
+void tempTrender::hotCold(double Hour){
 	vector<double> year, month, day, time, temp;
 	//Opening The File to be Read.
 	ifstream f(FilePath.c_str());
@@ -107,33 +118,36 @@ void tempTrender::hotCold(){
 	//Extract All Data
 	Reader(f, year, month, day, time, temp);
 	f.close();
-		
-	//TH1D* hist = new TH1D("Histogram","Hottest Temperature in a Year; Day of the year; Temperature[#circC]", 357, 0, 356);	
-	// This is the function
-	vector< vector<double> > Data;
-    
-    ofstream myfile("LunchTempMatrix.txt");
-    if (myfile.fail()){
-		cerr<<"Could not open file.\n";
-	}
 	
+	//Plotting Histograms
+	THStack* hs= new THStack("hs"," Hottest and Coldest Days");
+	TCanvas* d1 = new TCanvas("d1", "Hottest and Coldest Days", 900, 600);
+	TH1D* Hot = new TH1D("Hot","Hottest Temperature in a Year; Day of the year; Temperature[#circC]", 357, 0, 356);	
+	TH1D* Cold = new TH1D("Cold","Coldest Temperature in a Year; Day of the year; Temperature[#circC]", 357, 0, 356);
+	
+	// Finding the Hottest and Coldest Days at a Given Hour
     size_t Year = year.at(0); //Year we start from
     size_t LastYear =year.at(year.size()-1);
-	for (Year;  Year<LastYear ; Year++){
+    int Day=0;
+	for (Year;  Year<=LastYear ; Year++){
 		vector <double> Yrs;
 		for (size_t k=0; k<temp.size(); k++){
-			if (year.at(k) == Year && time.at(k) == 12.){
+			if (year.at(k) == Year && time.at(k) == Hour){
 			Yrs.push_back(temp.at(k));
-			myfile << temp.at(k) << ",";
+			Day++;
 			}
 		}
-		Data.push_back(Yrs);
-		myfile << "\n";
+		Cold->SetBinContent(min_element(Yrs.begin(), Yrs.end())- Yrs.begin(), Day);
+		Hot->SetBinContent(max_element(Yrs.begin(), Yrs.end())- Yrs.begin(), Day);
 	}
 	
-	myfile.close();
 	
-	//Once the above is working, we need to find minimum and maximum
+	Cold->SetFillColor(kBlue);
+	Hot->SetFillColor(kRed);	
+	hs->Add(Hot);
+	hs->Add(Cold);
+	hs->Draw();
+	d1->SaveAs(FileName.c_str());
 	
 }
 
