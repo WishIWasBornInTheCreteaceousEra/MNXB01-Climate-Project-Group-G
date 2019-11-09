@@ -21,19 +21,18 @@ tempTrender::tempTrender(string filePath){
 	cout << "The user supplied " << filePath << " as the path to the data file." << endl;
 	FilePath = filePath;
 	
+	//Extract File Name & set it to global variable FileName.
 	int pos1 = filePath.find("/"); 
 	string fileName = filePath.substr(pos1 + 1);
-	cout<<fileName<<endl;
 	int pos2 = fileName.find(".");
 	fileName = fileName.substr(0,  pos2);
-	cout<<fileName<<endl;
-	fileName.append(".jpg"); 
 	
 	FileName=fileName;
 }
 
 
 void tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate){
+	string fileName;
 	//This is the way to generate the data vectors in every function.
 	vector<double> year, month, day, time, temp;
 	
@@ -72,10 +71,14 @@ void tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate){
 
 	//Draw it and save it
 	hist->Draw();	
-	c1->SaveAs("TempOnDay.jpg");	
+	//Rename filename to fit function and Save canvas.
+	fileName=FileName;
+	fileName.append("_TempOnDay.jpg"); 
+	c1->SaveAs(fileName.c_str());	
 }
 
 void tempTrender::tempPerDay(double Year, double Hour){
+	string fileName;
 	//This is the way to generate the data vectors in every function.
 	vector<double> year, month, day, time, temp;
 	//Opening The File to be Read.
@@ -103,12 +106,17 @@ void tempTrender::tempPerDay(double Year, double Hour){
 	gStyle->SetOptStat(1111);
 	gStyle->SetOptFit(1111);
 	//Draw it and save it
-	hist->Draw();	
-	b1->SaveAs("TempThroughoutYear.jpg");
-	
+	hist->Draw();		
+	//Rename filename to fit function and Save canvas.
+	fileName=FileName;
+	fileName.append("_TempThroughoutYear.jpg"); 
+	b1->SaveAs(fileName.c_str());
 }
 
 void tempTrender::hotCold(double Hour){
+	
+	//Important Stuff
+	string fileName;
 	vector<double> year, month, day, time, temp;
 	//Opening The File to be Read.
 	ifstream f(FilePath.c_str());
@@ -147,11 +155,15 @@ void tempTrender::hotCold(double Hour){
 	hs->Add(Hot);
 	hs->Add(Cold);
 	hs->Draw();
-	d1->SaveAs(FileName.c_str());
+	//Rename file to fit function.
+	fileName=FileName;
+	fileName.append("_HottestAndColdestDays.jpg"); 
+	d1->SaveAs(fileName.c_str());
 	
 }
 
 void tempTrender::Seasons(double Hour){
+	string fileName;
 	//This is the way to generate the data vectors in every function.
 	vector<double> year, month, day, time, temp;
 	
@@ -177,6 +189,10 @@ void tempTrender::Seasons(double Hour){
 	TGraph* Graph= new TGraph(days, &t[0], &TatHr[0]);
 	Graph->SetTitle("Temperature over Time; Time (Days);Temperature[#circC]");
 	Graph->Draw();		
+	fileName=FileName;
+	fileName.append("_Seasons.jpg"); 
+	Seasons->SaveAs(fileName.c_str());
+	
 }
 
 
