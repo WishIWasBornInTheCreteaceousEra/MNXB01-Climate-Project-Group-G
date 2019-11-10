@@ -24,11 +24,8 @@ class tempTrender {
 	void Seasons(double Hour); //Make Graph of Temperature on a given hour every day.
 	void tempPerDay(double Year, double Hour);
 	void hotCold(double Hour); //Make a histogram of the hottest and coldest day of the year
-	
-	
-
-	//void tempPerDay(); //Make a histogram of the average temperature of each day of the year
-	//void tempPerYear(int yearToExtrapolate); //Make a histogram of average temperature per year, then fit and extrapolate to the given year
+	void tempDistYearHist(double Year, double Hour);//Make a histogram of the temperature distribution over months in a year
+	void tempDistYearGraph(double Year, double Hour);//Make a graph of the temperature distribution over months in a year
 	
 	
 	//Auxiliary Functions
